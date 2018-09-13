@@ -5,50 +5,62 @@ let alphabets: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 let capitals: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let lowercase: string = "abcdefghijklmnopqrstuvwxyz";
 let currentSpeed: number = 0;
+let previousElement : HTMLElement;
+let UniversalSpeed : number = 200;
+
+
+
+function defaultJumble(element: HTMLElement): void{
+    jumbleCharacters(element,returnNonNullTextContent(element.textContent),10,UniversalSpeed);
+}
+function defaultAdd(element: HTMLElement, string: string): void{
+    typeWriterAdd(element, string, UniversalSpeed);
+}
+function defaultDelete(element: HTMLElement, places: number): void{
+    typeWriterDelete(element, places, UniversalSpeed);
+}
+
 
 function typeWriterAdd(element: HTMLElement, string: string, speed: number): void{
     i = 0;
     setTimeout(function(){addText(element,string,speed)},currentSpeed);
-    currentSpeed += calculateSpeedString(string,speed);
+    //if(previousElement===element || previousElement===undefined){
+        currentSpeed += calculateSpeedString(string,speed);
+    //}else{
+    //    currentSpeed = 0;
+    //}
+    //previousElement = element;
 }
 
 function typeWriterDelete(element: HTMLElement, places: number, speed: number): void{
     i = 0;
     setTimeout(function(){deleteText(element,places,speed)},currentSpeed);
-    currentSpeed += calculateSpeed(places, speed);
-}
+    //if(previousElement===element || previousElement===undefined){
+        currentSpeed += calculateSpeed(places, speed);
+    //}else{
+    //    currentSpeed = 0;
+    //}
+    //previousElement = element;
 
-/*
-function addText(element: HTMLElement, string: string, speed: number): void{
-        if(i < string.length){
-            element.innerHTML += string.charAt(i);
-            i++;
-            setTimeout(function(): void{addText(element,string,speed)}, speed);
-        }else{
-            i = 0;
-        }
 }
-*/
 function addText(element: HTMLElement, string: string, speed: number): void{
-    let arr: string[] = stringToArray(element.innerHTML);
+    let arr: string[] = stringToArray(returnNonNullTextContent(element.textContent));
     let stringArray: string[] = [];
     for(let i = 0; i < string.length ; i++){
         arr.push(stringToArray(string)[i]);
         stringArray.push(arrayToString(arr));
     }
     i = 0;
-    //console.log(stringArray);
     changeTextThenStop(element,stringArray,speed);
 }
 function deleteText(element: HTMLElement, places: number, speed: number) :void{
-    let arr: string[] = stringToArray(element.innerHTML);
+    let arr: string[] = stringToArray(returnNonNullTextContent(element.textContent));
     let stringArray: string[] = [];
     for(let i = 0; i < places ; i++){
         arr.pop();
         stringArray.push(arrayToString(arr));
     }
     i = 0;
-    //console.log(stringArray);
     changeTextThenStop(element,stringArray,speed);
 }
 
@@ -59,7 +71,7 @@ function changeTextThenStop(element: HTMLElement, stringArray: string[], speed: 
         i = 0;
         return;
     }
-    element.innerHTML = stringArray[i];
+    element.textContent = stringArray[i];
     setTimeout(function(): void{changeTextThenStop(element,stringArray,speed)}, speed);
 }
 
@@ -69,9 +81,26 @@ function changeText(element: HTMLElement, stringArray: string[], speed: number):
     }else{
         i = 0;
     }
-    element.innerHTML = stringArray[i];
+    element.textContent = stringArray[i];
     setTimeout(function(): void{changeText(element,stringArray,speed)}, speed);
 }
+
+
+function jumbleCharacters(element: HTMLElement,string: string,timesJumbled: number, speed: number): void{
+    jumbleStringFunction(element,string,timesJumbled,speed,function(): string{ return randCharText(string.length)})
+}
+function jumbleStringFunction(element: HTMLElement,string: string, timesJumbled: number, speed: number, jumbleFunction: (n: number) => string): void{
+    if(i < timesJumbled){
+        element.textContent = jumbleFunction(string.length);
+        i++;
+    }
+    else{
+        element.textContent = string;
+        return;
+    }
+    setTimeout(function(): void{jumbleStringFunction(element,string,timesJumbled,speed,jumbleFunction)},speed);
+}
+
 
 function randText(numberOfCharacters: number, targetString: string): string{
     
@@ -98,14 +127,14 @@ function randLowerText(numberOfCharacters: number): string{
     return randText(numberOfCharacters,lowercase);
 }
 
-function stringToArray(string: string){
+function stringToArray(string: string): string[]{
     let array: string[] = [];
 	for(let i = 0; i < string.length; i++){
 		array.push(string.charAt(i));
 	}
 	return array;
 }
-function arrayToString(arr: string[]){
+function arrayToString(arr: string[]): string{
 	let string = "";
 	string = arr.join("");
 	return string;
@@ -119,3 +148,23 @@ function calculateSpeed(places: number, speed: number): number{
 function calculateSpeedString(string : string, speed: number): number{
     return calculateSpeed(string.length,speed);
 }
+
+function returnNonNullTextContent(textContent: string | null): string{
+    if(textContent === null){
+        return "";
+    }else{
+        return textContent;
+    }
+}
+
+/*
+function addText(element: HTMLElement, string: string, speed: number): void{
+        if(i < string.length){
+            element.innerHTML += string.charAt(i);
+            i++;
+            setTimeout(function(): void{addText(element,string,speed)}, speed);
+        }else{
+            i = 0;
+        }
+}
+*/
