@@ -9,13 +9,13 @@ let currentSpeed: number = 0;
 function typeWriterAdd(element: HTMLElement, string: string, speed: number): void{
     i = 0;
     setTimeout(function(){addText(element,string,speed)},currentSpeed);
-    currentSpeed = calculateSpeedString(string,speed);
+    currentSpeed += calculateSpeedString(string,speed);
 }
 
 function typeWriterDelete(element: HTMLElement, places: number, speed: number): void{
     i = 0;
     setTimeout(function(){deleteText(element,places,speed)},currentSpeed);
-    currentSpeed = calculateSpeed(places, speed);
+    currentSpeed += calculateSpeed(places, speed);
 }
 
 /*
