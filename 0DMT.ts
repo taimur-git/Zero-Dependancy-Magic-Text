@@ -4,19 +4,21 @@ let characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01
 let alphabets: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 let capitals: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let lowercase: string = "abcdefghijklmnopqrstuvwxyz";
+let currentSpeed: number = 0;
 
 function typeWriterAdd(element: HTMLElement, string: string, speed: number): void{
     i = 0;
-    addText(element,string,speed);
-
+    setTimeout(function(){addText(element,string,speed)},currentSpeed);
+    currentSpeed = calculateSpeedString(string,speed);
 }
 
 function typeWriterDelete(element: HTMLElement, places: number, speed: number): void{
     i = 0;
-    deleteText(element,places,speed);
+    setTimeout(function(){deleteText(element,places,speed)},currentSpeed);
+    currentSpeed = calculateSpeed(places, speed);
 }
 
-
+/*
 function addText(element: HTMLElement, string: string, speed: number): void{
         if(i < string.length){
             element.innerHTML += string.charAt(i);
@@ -26,6 +28,18 @@ function addText(element: HTMLElement, string: string, speed: number): void{
             i = 0;
         }
 }
+*/
+function addText(element: HTMLElement, string: string, speed: number): void{
+    let arr: string[] = stringToArray(element.innerHTML);
+    let stringArray: string[] = [];
+    for(let i = 0; i < string.length ; i++){
+        arr.push(stringToArray(string)[i]);
+        stringArray.push(arrayToString(arr));
+    }
+    i = 0;
+    //console.log(stringArray);
+    changeTextThenStop(element,stringArray,speed);
+}
 function deleteText(element: HTMLElement, places: number, speed: number) :void{
     let arr: string[] = stringToArray(element.innerHTML);
     let stringArray: string[] = [];
@@ -34,6 +48,7 @@ function deleteText(element: HTMLElement, places: number, speed: number) :void{
         stringArray.push(arrayToString(arr));
     }
     i = 0;
+    //console.log(stringArray);
     changeTextThenStop(element,stringArray,speed);
 }
 
@@ -94,4 +109,13 @@ function arrayToString(arr: string[]){
 	let string = "";
 	string = arr.join("");
 	return string;
+}
+
+function calculateSpeed(places: number, speed: number): number{
+    let functionSpeed: number = places * speed;
+    return functionSpeed;
+}
+
+function calculateSpeedString(string : string, speed: number): number{
+    return calculateSpeed(string.length,speed);
 }
