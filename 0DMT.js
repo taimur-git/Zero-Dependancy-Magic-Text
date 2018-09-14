@@ -7,14 +7,27 @@ var lowercase = "abcdefghijklmnopqrstuvwxyz";
 var currentSpeed = 0;
 var previousElement;
 var UniversalSpeed = 200;
-function defaultJumble(element) {
-    jumbleCharacters(element, returnNonNullTextContent(element.textContent), 10, UniversalSpeed);
+var jumbleFunctionList;
+(function (jumbleFunctionList) {
+    jumbleFunctionList[jumbleFunctionList["randomCharacters"] = 0] = "randomCharacters";
+    jumbleFunctionList[jumbleFunctionList["randomAlphabets"] = 1] = "randomAlphabets";
+    jumbleFunctionList[jumbleFunctionList["randomCapitals"] = 2] = "randomCapitals";
+    jumbleFunctionList[jumbleFunctionList["randomLowerCase"] = 3] = "randomLowerCase";
+})(jumbleFunctionList || (jumbleFunctionList = {}));
+function defaultJumble(element, jumbleVar) {
+    if (jumbleVar === void 0) { jumbleVar = 0; }
+    jumbleCharacters(element, returnNonNullTextContent(element.textContent), 10, UniversalSpeed, jumbleVar);
 }
 function defaultAdd(element, string) {
+    if (string === void 0) { string = "Hello World!"; }
     typeWriterAdd(element, string, UniversalSpeed);
 }
 function defaultDelete(element, places) {
+    if (places === void 0) { places = 0; }
     typeWriterDelete(element, places, UniversalSpeed);
+}
+function defaultChangeText(element, stringArray) {
+    changeText(element, stringArray, UniversalSpeed);
 }
 function typeWriterAdd(element, string, speed) {
     i = 0;
@@ -77,8 +90,8 @@ function changeText(element, stringArray, speed) {
     element.textContent = stringArray[i];
     setTimeout(function () { changeText(element, stringArray, speed); }, speed);
 }
-function jumbleCharacters(element, string, timesJumbled, speed) {
-    jumbleStringFunction(element, string, timesJumbled, speed, function () { return randCharText(string.length); });
+function jumbleCharacters(element, string, timesJumbled, speed, randCharGen) {
+    jumbleStringFunction(element, string, timesJumbled, speed, function () { return randTextGen(string.length, randCharGen); });
 }
 function jumbleStringFunction(element, string, timesJumbled, speed, jumbleFunction) {
     if (i < timesJumbled) {
@@ -98,17 +111,20 @@ function randText(numberOfCharacters, targetString) {
     }
     return randomString;
 }
-function randCharText(numberOfCharacters) {
-    return randText(numberOfCharacters, characters);
-}
-function randAlphaText(numberOfCharacters) {
-    return randText(numberOfCharacters, alphabets);
-}
-function randCapitalText(numberOfCharacters) {
-    return randText(numberOfCharacters, capitals);
-}
-function randLowerText(numberOfCharacters) {
-    return randText(numberOfCharacters, lowercase);
+function randTextGen(numberOfCharacters, randCharGen) {
+    switch (randCharGen) {
+        case 1:
+            return randText(numberOfCharacters, alphabets);
+            break;
+        case 2:
+            return randText(numberOfCharacters, capitals);
+            break;
+        case 3:
+            return randText(numberOfCharacters, lowercase);
+            break;
+        default:
+            return randText(numberOfCharacters, characters);
+    }
 }
 function stringToArray(string) {
     var array = [];

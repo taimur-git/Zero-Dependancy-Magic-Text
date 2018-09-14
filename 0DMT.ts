@@ -7,17 +7,25 @@ let lowercase: string = "abcdefghijklmnopqrstuvwxyz";
 let currentSpeed: number = 0;
 let previousElement : HTMLElement;
 let UniversalSpeed : number = 200;
-
-
-
-function defaultJumble(element: HTMLElement): void{
-    jumbleCharacters(element,returnNonNullTextContent(element.textContent),10,UniversalSpeed);
+enum jumbleFunctionList{
+    randomCharacters,
+    randomAlphabets,
+    randomCapitals,
+    randomLowerCase,
 }
-function defaultAdd(element: HTMLElement, string: string): void{
+
+
+function defaultJumble(element: HTMLElement, jumbleVar: jumbleFunctionList = 0): void{
+    jumbleCharacters(element,returnNonNullTextContent(element.textContent),10,UniversalSpeed,jumbleVar);
+}
+function defaultAdd(element: HTMLElement, string: string = "Hello World!"): void{
     typeWriterAdd(element, string, UniversalSpeed);
 }
-function defaultDelete(element: HTMLElement, places: number): void{
+function defaultDelete(element: HTMLElement, places: number = 0): void{
     typeWriterDelete(element, places, UniversalSpeed);
+}
+function defaultChangeText(element: HTMLElement, stringArray: string[]): void{
+    changeText(element, stringArray, UniversalSpeed);
 }
 
 
@@ -86,8 +94,8 @@ function changeText(element: HTMLElement, stringArray: string[], speed: number):
 }
 
 
-function jumbleCharacters(element: HTMLElement,string: string,timesJumbled: number, speed: number): void{
-    jumbleStringFunction(element,string,timesJumbled,speed,function(): string{ return randCharText(string.length)})
+function jumbleCharacters(element: HTMLElement,string: string,timesJumbled: number, speed: number, randCharGen : jumbleFunctionList): void{   
+    jumbleStringFunction(element,string,timesJumbled,speed,function(): string{ return randTextGen(string.length, randCharGen)});
 }
 function jumbleStringFunction(element: HTMLElement,string: string, timesJumbled: number, speed: number, jumbleFunction: (n: number) => string): void{
     if(i < timesJumbled){
@@ -111,22 +119,22 @@ function randText(numberOfCharacters: number, targetString: string): string{
     return randomString;
 }
 
-function randCharText(numberOfCharacters: number): string{
-    return randText(numberOfCharacters,characters);
-}
 
-function randAlphaText(numberOfCharacters: number): string{
-    return randText(numberOfCharacters,alphabets);
+function randTextGen(numberOfCharacters: number, randCharGen: jumbleFunctionList): string{
+    switch(randCharGen){
+        case 1:
+            return randText(numberOfCharacters,alphabets);
+            break;
+        case 2:
+            return randText(numberOfCharacters,capitals);
+            break;
+        case 3:
+            return randText(numberOfCharacters,lowercase);
+            break;
+        default:
+            return randText(numberOfCharacters,characters);
+    }
 }
-
-function randCapitalText(numberOfCharacters: number): string{
-    return randText(numberOfCharacters,capitals);
-}
-
-function randLowerText(numberOfCharacters: number): string{
-    return randText(numberOfCharacters,lowercase);
-}
-
 function stringToArray(string: string): string[]{
     let array: string[] = [];
 	for(let i = 0; i < string.length; i++){
