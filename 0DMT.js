@@ -164,14 +164,3 @@ function returnNonNullTextContent(textContent) {
         return textContent;
     }
 }
-/*
-function addText(element: HTMLElement, string: string, speed: number): void{
-        if(i < string.length){
-            element.innerHTML += string.charAt(i);
-            i++;
-            setTimeout(function(): void{addText(element,string,speed)}, speed);
-        }else{
-            i = 0;
-        }
-}
-*/ 
