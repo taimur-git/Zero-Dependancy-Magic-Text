@@ -74,20 +74,20 @@ function deleteText(element: HTMLElement, places: number, speed: number) :void{
 }
 
 function changeTextThenStop(element: HTMLElement, stringArray: string[], speed: number): void{
-    if(i != stringArray.length - 1){
+    if(i < stringArray.length){
+        element.textContent = stringArray[i];
+        previousElement = element;
         i++;
+        setTimeout(function(): void{changeTextThenStop(element,stringArray,speed)}, speed);
     }else{
         i = 0;
         currentSpeed = 0;
         return;
     }
-    element.textContent = stringArray[i];
-    previousElement = element;
-    setTimeout(function(): void{changeTextThenStop(element,stringArray,speed)}, speed);
 }
 
 function changeText(element: HTMLElement, stringArray: string[], speed: number): void{
-    if(i != stringArray.length - 1){
+    if(i < stringArray.length){
         i++;
     }else{
         i = 0;

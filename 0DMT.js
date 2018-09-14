@@ -73,20 +73,20 @@ function deleteText(element, places, speed) {
     changeTextThenStop(element, stringArray, speed);
 }
 function changeTextThenStop(element, stringArray, speed) {
-    if (i != stringArray.length - 1) {
+    if (i < stringArray.length) {
+        element.textContent = stringArray[i];
+        previousElement = element;
         i++;
+        setTimeout(function () { changeTextThenStop(element, stringArray, speed); }, speed);
     }
     else {
         i = 0;
         currentSpeed = 0;
         return;
     }
-    element.textContent = stringArray[i];
-    previousElement = element;
-    setTimeout(function () { changeTextThenStop(element, stringArray, speed); }, speed);
 }
 function changeText(element, stringArray, speed) {
-    if (i != stringArray.length - 1) {
+    if (i < stringArray.length) {
         i++;
     }
     else {
