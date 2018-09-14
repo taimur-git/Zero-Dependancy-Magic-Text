@@ -9,18 +9,16 @@ enum jumbleFunctionList{
     randomCapitals,
     randomLowerCase,
 }
-
-
-function defaultJumble(element: HTMLElement, jumbleVar: jumbleFunctionList = 0): void{
+function defaultJumble(element: HTMLElement = previousElement, jumbleVar: jumbleFunctionList = 0): void{
     jumbleCharacters(element,returnNonNullTextContent(element.textContent),10,UniversalSpeed,jumbleVar);
 }
-function defaultAdd(element: HTMLElement, string: string = "Hello World!"): void{
+function defaultAdd(element: HTMLElement = previousElement, string: string = "Hello World!"): void{
     typeWriterAdd(element, string, UniversalSpeed);
 }
-function defaultDelete(element: HTMLElement, places: number = 0): void{
+function defaultDelete(element: HTMLElement = previousElement, places: number = returnNonNullTextContent(element.textContent).length): void{
     typeWriterDelete(element, places, UniversalSpeed);
 }
-function defaultChangeText(element: HTMLElement, stringArray: string[]): void{
+function defaultChangeText(element: HTMLElement = previousElement, stringArray: string[]): void{
     changeText(element, stringArray, UniversalSpeed);
 }
 
@@ -28,23 +26,23 @@ function defaultChangeText(element: HTMLElement, stringArray: string[]): void{
 function typeWriterAdd(element: HTMLElement, string: string, speed: number): void{
     i = 0;
     setTimeout(function(){addText(element,string,speed)},currentSpeed);
-    //if(previousElement===element || previousElement===undefined){
+    if(previousElement===element || previousElement===undefined){
         currentSpeed += calculateSpeedString(string,speed);
-    //}else{
-    //    currentSpeed = 0;
-    //}
-    //previousElement = element;
+    }else{
+        currentSpeed = 0;
+    }
+    previousElement = element;
 }
 
 function typeWriterDelete(element: HTMLElement, places: number, speed: number): void{
     i = 0;
     setTimeout(function(){deleteText(element,places,speed)},currentSpeed);
-    //if(previousElement===element || previousElement===undefined){
+    if(previousElement===element || previousElement===undefined){
         currentSpeed += calculateSpeed(places, speed);
-    //}else{
-    //    currentSpeed = 0;
-    //}
-    //previousElement = element;
+    }else{
+        currentSpeed = 0;
+    }
+    previousElement = element;
 
 }
 function addText(element: HTMLElement, string: string, speed: number): void{
@@ -73,9 +71,11 @@ function changeTextThenStop(element: HTMLElement, stringArray: string[], speed: 
         i++;
     }else{
         i = 0;
+        currentSpeed = 0;
         return;
     }
     element.textContent = stringArray[i];
+    previousElement = element;
     setTimeout(function(): void{changeTextThenStop(element,stringArray,speed)}, speed);
 }
 
@@ -86,6 +86,7 @@ function changeText(element: HTMLElement, stringArray: string[], speed: number):
         i = 0;
     }
     element.textContent = stringArray[i];
+    previousElement = element;
     setTimeout(function(): void{changeText(element,stringArray,speed)}, speed);
 }
 
@@ -101,6 +102,7 @@ function jumbleStringFunction(element: HTMLElement,string: string, timesJumbled:
     else{
         i = 0;
         element.textContent = string;
+        previousElement = element;
         return;
     }
     setTimeout(function(): void{jumbleStringFunction(element,string,timesJumbled,speed,jumbleFunction)},speed);

@@ -11,39 +11,45 @@ var jumbleFunctionList;
     jumbleFunctionList[jumbleFunctionList["randomLowerCase"] = 3] = "randomLowerCase";
 })(jumbleFunctionList || (jumbleFunctionList = {}));
 function defaultJumble(element, jumbleVar) {
+    if (element === void 0) { element = previousElement; }
     if (jumbleVar === void 0) { jumbleVar = 0; }
     jumbleCharacters(element, returnNonNullTextContent(element.textContent), 10, UniversalSpeed, jumbleVar);
 }
 function defaultAdd(element, string) {
+    if (element === void 0) { element = previousElement; }
     if (string === void 0) { string = "Hello World!"; }
     typeWriterAdd(element, string, UniversalSpeed);
 }
 function defaultDelete(element, places) {
-    if (places === void 0) { places = 0; }
+    if (element === void 0) { element = previousElement; }
+    if (places === void 0) { places = returnNonNullTextContent(element.textContent).length; }
     typeWriterDelete(element, places, UniversalSpeed);
 }
 function defaultChangeText(element, stringArray) {
+    if (element === void 0) { element = previousElement; }
     changeText(element, stringArray, UniversalSpeed);
 }
 function typeWriterAdd(element, string, speed) {
     i = 0;
     setTimeout(function () { addText(element, string, speed); }, currentSpeed);
-    //if(previousElement===element || previousElement===undefined){
-    currentSpeed += calculateSpeedString(string, speed);
-    //}else{
-    //    currentSpeed = 0;
-    //}
-    //previousElement = element;
+    if (previousElement === element || previousElement === undefined) {
+        currentSpeed += calculateSpeedString(string, speed);
+    }
+    else {
+        currentSpeed = 0;
+    }
+    previousElement = element;
 }
 function typeWriterDelete(element, places, speed) {
     i = 0;
     setTimeout(function () { deleteText(element, places, speed); }, currentSpeed);
-    //if(previousElement===element || previousElement===undefined){
-    currentSpeed += calculateSpeed(places, speed);
-    //}else{
-    //    currentSpeed = 0;
-    //}
-    //previousElement = element;
+    if (previousElement === element || previousElement === undefined) {
+        currentSpeed += calculateSpeed(places, speed);
+    }
+    else {
+        currentSpeed = 0;
+    }
+    previousElement = element;
 }
 function addText(element, string, speed) {
     var arr = stringToArray(returnNonNullTextContent(element.textContent));
@@ -71,9 +77,11 @@ function changeTextThenStop(element, stringArray, speed) {
     }
     else {
         i = 0;
+        currentSpeed = 0;
         return;
     }
     element.textContent = stringArray[i];
+    previousElement = element;
     setTimeout(function () { changeTextThenStop(element, stringArray, speed); }, speed);
 }
 function changeText(element, stringArray, speed) {
@@ -84,6 +92,7 @@ function changeText(element, stringArray, speed) {
         i = 0;
     }
     element.textContent = stringArray[i];
+    previousElement = element;
     setTimeout(function () { changeText(element, stringArray, speed); }, speed);
 }
 function jumbleCharacters(element, string, timesJumbled, speed, randCharGen) {
@@ -97,6 +106,7 @@ function jumbleStringFunction(element, string, timesJumbled, speed, jumbleFuncti
     else {
         i = 0;
         element.textContent = string;
+        previousElement = element;
         return;
     }
     setTimeout(function () { jumbleStringFunction(element, string, timesJumbled, speed, jumbleFunction); }, speed);
