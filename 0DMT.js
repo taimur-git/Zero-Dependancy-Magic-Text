@@ -1,12 +1,8 @@
 var i = 0;
 var running = false;
-var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-var alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-var capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var lowercase = "abcdefghijklmnopqrstuvwxyz";
 var currentSpeed = 0;
-var previousElement;
 var UniversalSpeed = 200;
+var previousElement;
 var jumbleFunctionList;
 (function (jumbleFunctionList) {
     jumbleFunctionList[jumbleFunctionList["randomCharacters"] = 0] = "randomCharacters";
@@ -99,6 +95,7 @@ function jumbleStringFunction(element, string, timesJumbled, speed, jumbleFuncti
         i++;
     }
     else {
+        i = 0;
         element.textContent = string;
         return;
     }
@@ -112,6 +109,10 @@ function randText(numberOfCharacters, targetString) {
     return randomString;
 }
 function randTextGen(numberOfCharacters, randCharGen) {
+    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    var capitals = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var lowercase = "abcdefghijklmnopqrstuvwxyz";
     switch (randCharGen) {
         case 1:
             return randText(numberOfCharacters, alphabets);

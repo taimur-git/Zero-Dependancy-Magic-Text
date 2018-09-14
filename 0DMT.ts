@@ -1,12 +1,8 @@
 let i: number = 0;
 let running: boolean = false;
-let characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-let alphabets: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-let capitals: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-let lowercase: string = "abcdefghijklmnopqrstuvwxyz";
 let currentSpeed: number = 0;
-let previousElement : HTMLElement;
 let UniversalSpeed : number = 200;
+let previousElement : HTMLElement;
 enum jumbleFunctionList{
     randomCharacters,
     randomAlphabets,
@@ -103,15 +99,13 @@ function jumbleStringFunction(element: HTMLElement,string: string, timesJumbled:
         i++;
     }
     else{
+        i = 0;
         element.textContent = string;
         return;
     }
     setTimeout(function(): void{jumbleStringFunction(element,string,timesJumbled,speed,jumbleFunction)},speed);
 }
-
-
-function randText(numberOfCharacters: number, targetString: string): string{
-    
+function randText(numberOfCharacters: number, targetString: string): string{   
     let randomString : string = "";
     for(let i = 0; i < numberOfCharacters ; i++){
         randomString += targetString.charAt(Math.floor(Math.random() * targetString.length))
@@ -119,8 +113,11 @@ function randText(numberOfCharacters: number, targetString: string): string{
     return randomString;
 }
 
-
 function randTextGen(numberOfCharacters: number, randCharGen: jumbleFunctionList): string{
+    let characters: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let alphabets: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let capitals: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let lowercase: string = "abcdefghijklmnopqrstuvwxyz";
     switch(randCharGen){
         case 1:
             return randText(numberOfCharacters,alphabets);
